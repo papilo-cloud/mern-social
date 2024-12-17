@@ -12,6 +12,7 @@ app.use(cors())
 app.use(compress())
 app.use(cookieParser())
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 app.use('/api/users', userRoute)
 
 module.exports = app
