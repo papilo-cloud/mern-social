@@ -47,7 +47,7 @@ let signin = async (req, res) => {
             user: {
                 name: user.name,
                 email: user.email,
-                password: user.password,
+                id: user.id,
                 photo: user.photo,
                 about: user.about,
             }
