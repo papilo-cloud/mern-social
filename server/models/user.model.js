@@ -31,7 +31,15 @@ const UserSchema = new Schema({
     created: {
         type: Date,
         default: Date.now
-    }
+    },
+    following: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    followers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 })
 
 const User = model('User', UserSchema)
