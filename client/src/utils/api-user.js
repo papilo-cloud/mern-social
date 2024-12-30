@@ -1,4 +1,3 @@
-import { data } from "autoprefixer";
 import axios from "axios";
 
 const list = async () => {
@@ -43,8 +42,9 @@ const remove = async (params, credentials) => {
                 Authorization: `Bearer ${credentials}`
             }
         })
+        return response
     } catch (err) {
-        return err.response
+        return err.response.data
     }
 }
 
@@ -57,4 +57,38 @@ const upload = async (data) => {
     }
 }
 
-export { list, read, update, remove, upload}
+const follow = async (userId, credentials, followId) => {
+    try {
+        const response = await axios.put('/api/users/follow', JSON.stringify({userId, followId}), 
+            {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${credentials}`
+                }
+            }
+        )
+        return response
+    } catch (err) {
+        return err.response
+    }
+}
+
+const unfollow = async (userId, credentials, unfollowId) => {
+    try {
+        const response = await axios.put('/api/users/unfollow', {userId, unfollowId}, 
+            {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${credentials}`
+                }
+            }
+        )
+        return response
+    } catch (err) {
+        return err.response
+    }
+}
+
+export { list, read, update, remove, upload, follow, unfollow}
