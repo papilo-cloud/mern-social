@@ -7,10 +7,14 @@ userRoute.route('/')
     .get(usersCntrl.getUsersRoute)
 
 userRoute.use(requireAuth)
+userRoute.route('/follow')
+    .put(usersCntrl.addFollowing, usersCntrl.addFollower)
+userRoute.route('/unfollow')
+    .put(usersCntrl.removeFollowing, usersCntrl.removeFollower)
 userRoute.route('/:userId')
     .get(usersCntrl.getUserRoute)
-    .put(enforce(usersCntrl.userPolicy), usersCntrl.updateUserRoute)
-    .delete(enforce(usersCntrl.userPolicy), usersCntrl.deleteUserRoute)
+    .put( usersCntrl.updateUserRoute)
+    .delete( usersCntrl.deleteUserRoute)
 
 
 module.exports = userRoute
