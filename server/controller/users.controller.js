@@ -22,6 +22,9 @@ let getUsersRoute = async (req, res) => {
 let getUserRoute = async (req, res) => {
     try {
         const user = await User.findById(req.params.userId)
+            .populate('followers', '_id name photo')
+            .populate('following', '_id name photo')
+            .exec()
         res.json(user)
     } catch (err) {
         return res.status(400).json({
@@ -37,7 +40,7 @@ let updateUserRoute = async (req, res) => {
     }
     try {
         const updatedUser = await User.findByIdAndUpdate(req.params.userId, req.body, {new: true})
-        res.json(updatedUser)
+        res.status(200).json(updatedUser)
     } catch (err) {
         return res.status(401).json({
             error: 'You can only update your account!'
@@ -58,7 +61,61 @@ let deleteUserRoute = async (req, res) => {
     }
 }
 
+let addFollowing = async (req, res, next) => {
+    try {
+        await User.findByIdAndUpdate(req.body.userId, 
+            { $push: { following: req.body.followId }}
+        )
+        next()
+    } catch (err) {
+        return res.status(400).json({
+            error: getErrorMessage(err)
+        })
+    }
+
+}
+
+let addFollower = async (req, res) => {
+    try {
+        let result = await User.findByIdAndUpdate(req.body.followId, 
+            { $push: { followers: req.body.userId }},
+            { new: true })
+        res.json(result)
+    } catch (err) {
+        return res.status.json({
+            error: getErrorMessage(err)
+        })
+    }
+}
+
+let removeFollowing = async (req, res, next) => {
+    try {
+        await User.findByIdAndUpdate(req.body.userId, 
+            { $pull: { following: req.body.unfollowId } }
+        )
+        next()
+    } catch (err) {
+        return res.status(400).json({
+            error: getErrorMessage(err)
+        })
+    }
+}
+
+let removeFollower = async (req, res) => {
+    try {
+        let result = await User.findByIdAndUpdate(req.body.unfollowId, 
+            { $pull: { followers: req.body.userId }},
+            { new: true })
+        res.json(result)
+    } catch (err) {
+        return res.status(400).json({
+            error: getErrorMessage(err)
+        })
+    }
+}
+
 module.exports = {
     userPolicy, getUserRoute, getUsersRoute,
-    deleteUserRoute, updateUserRoute
+    deleteUserRoute, updateUserRoute,addFollower,
+    addFollowing, removeFollower, removeFollowing
 }
