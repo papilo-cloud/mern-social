@@ -16,9 +16,9 @@ const signin = async (data) => {
                 Accept: 'application/json'
             }
         })
-        return response
+        return response.data
     } catch (err) {
-        return err.response
+        return err.response.data
     }
     
 }
