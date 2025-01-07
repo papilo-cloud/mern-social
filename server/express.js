@@ -9,6 +9,7 @@ const authRoute = require('./routes/auth.route')
 const uploadRoute = require('./routes/uploads.route')
 const tokenAuth = require('./lib/token-auth')
 const { byToken } = require('./lib/find-user')
+const postRoute = require('./routes/posts.route')
 
 const app = express()
 
@@ -24,5 +25,6 @@ app.use('/api/auth', authRoute)
 app.use(tokenAuth(byToken))
 app.use('/api/users', userRoute)
 app.use('/api/upload', uploadRoute)
+app.use('/api/posts', postRoute)
 
 module.exports = app
