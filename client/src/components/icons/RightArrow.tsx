@@ -2,7 +2,7 @@ import React, { ComponentProps } from "react"
 
 const RightArrow: React.FC<ComponentProps<'svg'>> = ({...props}) => {
   return (
-    <svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+    <svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1"
 	 viewBox="0 0 330 330" 
    {...props}>
     <path id="XMLID_27_" d="M15,180h263.787l-49.394,49.394c-5.858,5.857-5.858,15.355,0,21.213C232.322,253.535,236.161,255,240,255
