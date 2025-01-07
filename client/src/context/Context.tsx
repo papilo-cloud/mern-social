@@ -3,7 +3,7 @@ import {signin} from '../utils/auth/api-auth'
 import { auth } from '../utils/auth/auth-helper'
 
 interface ContextProps {
-    auth: any
+    auth: any;
 }
 
 const authContext = createContext({} as ContextProps)
@@ -16,7 +16,7 @@ export const ContextProvider = ({children}: {children: ReactNode}) => {
     const auth = useProviderAuth()
     return(
         <authContext.Provider value={{
-            auth
+            auth,
         }}>
             {children}
         </authContext.Provider>
@@ -30,6 +30,8 @@ const useProviderAuth = () => {
         error: '',
         redirectToReferrer: false
     })
+
+    const [open, setOpen] = useState(false)
 
     const onSignin = (val) => {
         setValues(val)
@@ -63,6 +65,8 @@ const useProviderAuth = () => {
         onSignin,
         values,
         setValues,
-        signout
+        signout,
+        open,
+        setOpen
     }
 }
