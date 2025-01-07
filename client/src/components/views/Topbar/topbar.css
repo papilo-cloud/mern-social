@@ -8,13 +8,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #1a0529;
+    background: #1c7c5c;
     color: #fff;
     overflow: hidden;
     z-index: 1;
 }
 .topbar nav{
     position: relative;
+}
+nav span{
+    font-weight: bold;
 }
 .topbar ul{
     position: relative;
@@ -33,5 +36,5 @@ li button{
     text-transform: uppercase;
 }
 a.active{
-    color: rgb(234, 100, 100);
+    color: #161818;
 }
