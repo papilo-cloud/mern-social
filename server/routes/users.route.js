@@ -11,10 +11,12 @@ userRoute.route('/follow')
     .put(usersCntrl.addFollowing, usersCntrl.addFollower)
 userRoute.route('/unfollow')
     .put(usersCntrl.removeFollowing, usersCntrl.removeFollower)
+userRoute.route('/findpeople')
+    .get(usersCntrl.findPeople)
 userRoute.route('/:userId')
     .get(usersCntrl.getUserRoute)
-    .put( usersCntrl.updateUserRoute)
-    .delete( usersCntrl.deleteUserRoute)
+    .put(enforce(usersCntrl.userPolicy), usersCntrl.updateUserRoute)
+    .delete(enforce(usersCntrl.userPolicy), usersCntrl.deleteUserRoute)
 
 
 module.exports = userRoute
