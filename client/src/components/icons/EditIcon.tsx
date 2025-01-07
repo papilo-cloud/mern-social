@@ -2,7 +2,7 @@ import React, { ComponentProps } from 'react'
 
 const EditIcon: React.FC<ComponentProps<'svg'>> = ({...props}) => {
   return (
-    <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+    <svg fill="#000000" version="1.1" id="Capa_1"
 	 width="800px" height="800px" viewBox="0 0 494.936 494.936"
 	 {...props}>
         <g>

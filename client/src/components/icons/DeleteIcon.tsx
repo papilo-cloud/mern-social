@@ -5,7 +5,7 @@ const DeleteIcon: React.FC<ComponentProps<'svg'>> = ({...props}) => {
     <svg width="800px" height="800px" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg"
         {...props}>
         <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-            <g id="Dribbble-Light-Preview" transform="translate(-179.000000, -360.000000)" fill="#c14832">
+            <g id="Dribbble-Light-Preview" transform="translate(-179.000000, -360.000000)" fill="#c14832" {...props}>
                 <g id="icons" transform="translate(56.000000, 160.000000)">
                     <path d="M130.35,216 L132.45,216 L132.45,208 L130.35,208 L130.35,216 Z M134.55,216 
                         L136.65,216 L136.65,208 L134.55,208 L134.55,216 Z M128.25,218 L138.75,218 L138.75,206 
