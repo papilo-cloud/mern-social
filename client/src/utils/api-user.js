@@ -91,4 +91,56 @@ const unfollow = async (userId, credentials, unfollowId) => {
     }
 }
 
-export { list, read, update, remove, upload, follow, unfollow}
+const listNewsFeed = async (userId, credentials) => {
+    try {
+        const response = await axios.get(`/api/posts/feed/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${credentials}`
+            }
+        })
+        return response
+    } catch (err) {
+        return err.response.data
+    }
+}
+
+const listByUser = async (userId, credentials) => {
+    try {
+        const response = await axios.get(`/api/posts/by/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${credentials}`
+            }
+        })
+        return response
+    } catch (err) {
+        return err.response.data
+    }
+}
+
+const createPost = async (userId, credentials, data) => {
+    try {
+        const response = await axios.post(`/api/posts/new/${userId}`, data, {
+            headers: {
+                Authorization: `Bearer ${credentials}`
+            }
+        })
+        return response
+    } catch (err) {
+        return err.response.data
+    }
+}
+
+const findPeople = async (userId, credentials) => {
+    try {
+        const response = await axios.get(`/api/users/findpeople`, {
+            headers: {
+                Authorization: `Bearer ${credentials}`
+            }
+        })
+        return response
+    } catch (err) {
+        return err.response.data
+    }
+}
+export { list, read, update, remove, upload, follow, unfollow,
+     listNewsFeed, listByUser, createPost, findPeople}
