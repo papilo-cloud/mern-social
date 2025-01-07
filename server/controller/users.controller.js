@@ -114,8 +114,24 @@ let removeFollower = async (req, res) => {
     }
 }
 
+const findPeople = async (req, res) => {
+    let following = req.profile.following
+    following.push(req.profile._id)
+    // console.log(following)
+    try {
+        let people = await User.find({_id:{$nin: following}}, 'name photo') 
+                                    
+        res.json(people)
+    } catch (err) {
+        return res.status(400).json({
+            error: getErrorMessage(err)
+        })
+    }
+}
+
 module.exports = {
     userPolicy, getUserRoute, getUsersRoute,
     deleteUserRoute, updateUserRoute,addFollower,
-    addFollowing, removeFollower, removeFollowing
+    addFollowing, removeFollower, removeFollowing,
+    findPeople
 }
