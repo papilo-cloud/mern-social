@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import Avatar from '../Avatar/Avatar'
+import {Avatar} from '../Avatar/Avatar'
 
 interface FollowGridProps {
     array: {
