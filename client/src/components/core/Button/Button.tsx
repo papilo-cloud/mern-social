@@ -7,9 +7,7 @@ const Button: React.FC<React.ComponentProps<'button'>> = ({
     ...props
 }) => {
   return (
-    <button className={clsx('flex items-center justify-center bg-primary',
-        'py-2 px-4 border-0 rounded'
-    , className)} {...props}>
+    <button className={clsx('flex items-center justify-center bg-primary py-2 px-4 border-0 rounded', className)} {...props}>
         {children}
     </button>
   )
