@@ -1,4 +1,3 @@
-const { json } = require('express')
 const Post = require('../models/post.model')
 const getErrorMessage = require('../lib/dbErrorHandlers')
 
@@ -44,5 +43,6 @@ const createPost = async (req, res) => {
         })
     }
 }
+
 
 module.exports = {listNewsFeed, listByUser, createPost}
