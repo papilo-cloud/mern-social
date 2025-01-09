@@ -5,11 +5,10 @@ import { Button, ButtonText } from '../core/Button/index'
 import { FormField, HelperText, TextArea, TextLabel } from '../core/Form/index'
 import UploadIcon from '../icons/UploadIcon'
 import { createPost, upload } from '../../utils/api-user'
+import { usePost } from '../../context/PostContext'
 
-interface NewPostProps {
-    addUpdate: (post:any) => any
-}
-const NewPost = ({addUpdate}: NewPostProps) => {
+
+const NewPost = () => {
   const [values, setValues] = useState({
     text: '',
     error: '',
@@ -18,6 +17,8 @@ const NewPost = ({addUpdate}: NewPostProps) => {
   })
 
   const jwt = auth.isAuthenticated()
+  const { addPost } = usePost()
+  
 
   const handleChange = (name) => (event) => {
     const value = name == 'file' ?
@@ -53,13 +54,12 @@ const NewPost = ({addUpdate}: NewPostProps) => {
       if (res.status != 200) {
         setValues({...values, error: res.error})
       } else {
-        setValues({...values, text: '', file: null})
-        addUpdate(res.data)
+        addPost(res.data)
       }
-      console.log(addUpdate)
-      console.log(res.data)
+      setValues({...values, text: '', error: res.error, file: null})
     })
   }
+
 
 
   return (
@@ -71,8 +71,8 @@ const NewPost = ({addUpdate}: NewPostProps) => {
         <FormField onSubmit={handlePostSubmit} className='bg-white flex flex-col'>
             <div className='w-full py-2 px-10'>
                 <TextArea
-                    value={values.text}
                     onChange={handleChange('text')}
+                    value={values.text}
                     className='w-full min-h-28'
                     placeholder='Share your thoughts...' />
                 <TextLabel className=' self-start cursor-pointer'>
