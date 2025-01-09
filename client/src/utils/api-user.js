@@ -142,5 +142,19 @@ const findPeople = async (userId, credentials) => {
         return err.response.data
     }
 }
+
+const removePost = async (postId, credentials) => {
+    try {
+        const response = await axios.delete(`/api/posts/${postId}`, {
+            headers: {
+                Authorization: `Bearer ${credentials}`
+            }
+        })
+        return response
+    } catch (err) {
+        return err.response.data
+    }
+}
 export { list, read, update, remove, upload, follow, unfollow,
-     listNewsFeed, listByUser, createPost, findPeople}
+    listNewsFeed, listByUser, createPost, findPeople,
+    removePost}
