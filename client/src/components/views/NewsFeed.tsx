@@ -1,38 +1,30 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import NewPost from '../Newsfeed/NewPost'
 import PostList from '../Newsfeed/PostList'
 import { listNewsFeed } from '../../utils/api-user'
 import { auth } from '../../utils/auth/auth-helper'
+import { usePost } from '../../context/PostContext'
 
 const NewsFeed = () => {
-    const [posts, setPosts] = useState<any>([])
+    const { posts, setPosts } = usePost()
 
     const jwt = auth.isAuthenticated()
 
-    const addPost = (post) => {
-        console.log(post)
-        const updatedPosts = [...posts]
-        updatedPosts.unshift(post)
-        setPosts(updatedPosts)
-    }
-    // console.log(posts)
-
-    const removePost = (post: any) => {
-        const updatedPosts = [...posts]
-        const index = updatedPosts.indexOf(post)
-        updatedPosts.splice(index, 1)
-        setPosts(updatedPosts)
-    }
-
     useEffect(() => {
+        let ignore = false
         listNewsFeed(jwt.user.id, jwt.token)
             .then(res => {
                 if (res.status != 200) {
                     console.log(res)
                 } else {
-                    setPosts(res.data)
+                    if (!ignore) {
+                        setPosts(res.data)
+                    }
                 }
             })
+        return () => {
+            ignore = true
+        }
     }, [])
   return (
     <div className='bg-white rounded drop-shadow-[0_0_10px_rgba(0,0,0,0.2)] justify-end w-full items-end grow'>
@@ -40,10 +32,10 @@ const NewsFeed = () => {
             <p className='text-xl font-medium self-start text-left text-green-normal'>Feeds</p>
         </div>
         <div className='bg-gray-200 px-8 py-5'>
-            <NewPost addUpdate={addPost} />
+            <NewPost />
         </div>
         <div className='px-8 py-5'>
-            <PostList removeUpdate={removePost} posts={posts} />
+            <PostList />
         </div>
         
     </div>
