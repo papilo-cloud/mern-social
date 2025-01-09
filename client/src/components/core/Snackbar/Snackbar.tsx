@@ -1,14 +1,15 @@
 import clsx from "clsx";
-import { ComponentProps, useEffect, useState } from "react";
+import { ComponentProps, useEffect } from "react";
 import { useAuth } from "../../../context/Context";
 
 export interface SnackbarProps extends ComponentProps<'div'> {
-    isOpen?: boolean,
-    timedOut: number,
-    textStyle?: string
+    isOpen?: boolean;
+    timedOut: number;
+    textStyle?: string;
+    message: string
 }
 
-const Snackbar = ({isOpen, textStyle, timedOut=3, className, children}: SnackbarProps) => {
+const Snackbar = ({isOpen, textStyle, timedOut=3, message, className, children}: SnackbarProps) => {
 
     const {auth} = useAuth()
 
@@ -24,7 +25,7 @@ const Snackbar = ({isOpen, textStyle, timedOut=3, className, children}: Snackbar
   return (
     <>{
         isOpen && <div className={clsx('bg-black z-50 py-3 px-6 fixed top-4 left-[50%] translate-x-[-50%] animate-scale rounded-md', className)}>
-        <p className={clsx("text-red-700 text-base", textStyle)}>Following <b>{children}</b> !</p>
+        <p className={clsx("text-red-700 text-base", textStyle)}>{message} <b>{children}!</b></p>
     </div>
     }</>
   )
