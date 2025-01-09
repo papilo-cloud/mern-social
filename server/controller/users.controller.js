@@ -117,7 +117,7 @@ let removeFollower = async (req, res) => {
 const findPeople = async (req, res) => {
     let following = req.profile.following
     following.push(req.profile._id)
-    // console.log(following)
+
     try {
         let people = await User.find({_id:{$nin: following}}, 'name photo') 
                                     
