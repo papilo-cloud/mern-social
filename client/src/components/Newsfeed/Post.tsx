@@ -3,7 +3,9 @@ import CommentIcon from '../icons/CommentIcon';
 import {Avatar, BgImage} from '../core/Avatar/Avatar';
 import { FormField, TextArea } from '../core/Form';
 import { auth } from '../../utils/auth/auth-helper'
+import { removePost } from '../../utils/api-user'
 import DeleteIcon from '../icons/DeleteIcon';
+import { usePost } from '../../context/PostContext';
 
 interface PostProps {
     post: {
@@ -15,14 +17,25 @@ interface PostProps {
       },
       created: number,
       text: string,
-      photo: string
+      photo: string,
+      _id: string
     };
-    onRemove: (remove:never) => void
 }
-const Post = ({post, onRemove}: PostProps) => {
+const Post = ({post}: PostProps) => {
   
-    const PF = 'http://localhost:8080/uploads/'
   const jwt = auth.isAuthenticated()
+  const { removePosts } = usePost()
+
+  const deletePost = () => {
+    removePost(post._id, jwt.token)
+        .then(res => {
+            if (res.status != 200) {
+                console.log(res)
+            } else {
+                removePosts(post)
+            }
+        })
+  }
   return (
     <div className='border-2 border-green-light rounded text-base shadow-md'>
         <div className='px-4 py-2 bg-green-light flex items-center justify-between'>
@@ -33,7 +46,7 @@ const Post = ({post, onRemove}: PostProps) => {
                     <span>{new Date(post.created).toDateString()}</span>
                 </div>
             </div>
-            <button><DeleteIcon width={24} height={24} fill='#000' /></button>
+            <button onClick={deletePost}><DeleteIcon width={24} height={24} fill='#000' /></button>
         </div>
         <div className='w-full px-4 py-8'>
             <BgImage photo={post.photo} />
