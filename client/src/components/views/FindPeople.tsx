@@ -51,7 +51,10 @@ const FindPeople = () => {
 
   return (
     <Card className='mt-0 p-0'>
-        <Snackbar timedOut={3} isOpen={open} >{values.message}</Snackbar>
+        <Snackbar
+            timedOut={3} 
+            isOpen={open} 
+            message='Following'>{values.message}</Snackbar>
         <CardContent className=' p-5 bg-white rounded drop-shadow-[0_0_10px_rgba(0,0,0,0.2)]'>
             <h1 className=' text-xl font-medium self-start text-left text-green-normal'>Suggestions</h1>
             <CardContent className='users'>
