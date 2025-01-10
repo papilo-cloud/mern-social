@@ -1,8 +1,15 @@
 const Post = require('../models/post.model')
 const getErrorMessage = require('../lib/dbErrorHandlers')
+const { response } = require('express')
 
+const postsPolicy = async (req) => {
+    let post = await Post.findById(req.params.postId)
+    let profile = req.profile
+    return Buffer.from(post.postedBy._id, 'utf-8').toString() === profile.id
+}
 const listNewsFeed = async (req, res) => {
     let following = req.profile.following
+    following.push(req.profile._id)
     try {
         let posts = await Post.find({postedBy: {
                 $in: req.profile.following
@@ -44,5 +51,51 @@ const createPost = async (req, res) => {
     }
 }
 
+const removePost = async (req, res) => {
+    try {
+        const post = await Post.findByIdAndDelete(req.params.postId)
+        res.json({
+            message: 'Post has been deleted...'
+        })
+    } catch (err) {
+        return res.status(401).json({
+            error: 'You can only delete your post!'
+        })
+    }
+}
 
-module.exports = {listNewsFeed, listByUser, createPost}
+const like = async (req, res) => {
+    try {
+        const result = await Post.findByIdAndUpdate(req.body.postId,
+                                    {
+                                        $push:{likes: req.body.userId}
+                                    },
+                                    {new: true})
+        res.json(result)
+    } catch (err) {
+        return res.status(400).json({
+            error: getErrorMessage(err)
+        })
+    }
+}
+
+const unlike = async (req, res) => {
+    try {
+        const result = await Post.findByIdAndUpdate(req.body.postId, 
+                                    {
+                                        $pull: {likes: req.body.userId}
+                                    },
+                                    {new: true}
+        )
+        res.json(result)
+    } catch (err) {
+        return res.status(400).json({
+            error: getErrorMessage(err)
+        })
+    }
+}
+
+
+module.exports = {listNewsFeed, listByUser, createPost, postsPolicy,
+    removePost, like, unlike
+}
