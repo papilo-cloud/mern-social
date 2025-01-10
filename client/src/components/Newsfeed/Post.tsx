@@ -28,8 +28,11 @@ const Post = ({post}: PostProps) => {
   const [values, setValues] = useState({
     like: isLiked(post.likes),
     likes: post.likes.length,
-    comments: post.comments.length
+    comments: post.comments.length,
+    comment: post.comments
   })
+
+  console.log(values.comment)
   const { removePosts } = usePost()
 
   function isLiked(likes: any[]) {
@@ -78,7 +81,10 @@ const Post = ({post}: PostProps) => {
         </div>
         <div className='bg-green-light'>
             <Actions onLiked={handleLike} likes={values.likes} isLiked={values.like} comments={values.comments} />
-            <Comments />
+            <Comments
+                postId={post._id}
+                comments={values.comment}
+                updatedComments={() => {}} />
         </div>
     </div>
   )
