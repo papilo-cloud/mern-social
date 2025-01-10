@@ -181,6 +181,21 @@ const unlike = async (postId, credentials, userId) => {
         return err.response.data
     }
 }
+
+const comment = async (credentials, postId, comment) => {
+    try {
+        const response = await axios.put('/api/posts/comment', {postId, comment},
+            {
+                headers: {
+                    Authorization: `Bearer ${credentials}`
+                }
+            }
+        )
+        return response
+    } catch (err) {
+        return err.response.data
+    }
+}
 export { list, read, update, remove, upload, follow, unfollow,
     listNewsFeed, listByUser, createPost, findPeople,
-    removePost, like, unlike}
+    removePost, like, unlike, comment}
