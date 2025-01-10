@@ -59,7 +59,7 @@ const upload = async (data) => {
 
 const follow = async (userId, credentials, followId) => {
     try {
-        const response = await axios.put('/api/users/follow', JSON.stringify({userId, followId}), 
+        const response = await axios.put('/api/users/follow', {userId, followId}, 
             {
                 headers: {
                     Accept: 'application/json',
@@ -155,6 +155,32 @@ const removePost = async (postId, credentials) => {
         return err.response.data
     }
 }
+
+const like = async (postId, credentials, userId) => {
+    try {
+        const response = await axios.put('/api/posts/like', {postId, userId},{
+            headers: {
+                Authorization: `Bearer ${credentials}`
+            }
+        })
+        return response
+    } catch (err) {
+        return err.response.data
+    }
+}
+
+const unlike = async (postId, credentials, userId) => {
+    try {
+        const response = await axios.put('/api/posts/unlike', {postId, userId},{
+            headers: {
+                Authorization: `Bearer ${credentials}`
+            }
+        })
+        return response
+    } catch (err) {
+        return err.response.data
+    }
+}
 export { list, read, update, remove, upload, follow, unfollow,
     listNewsFeed, listByUser, createPost, findPeople,
-    removePost}
+    removePost, like, unlike}
