@@ -1,11 +1,11 @@
-import LikeIconFill from '../icons/LikeIconFill';
-import CommentIcon from '../icons/CommentIcon';
 import {Avatar, BgImage} from '../core/Avatar/Avatar';
-import { FormField, TextArea } from '../core/Form';
 import { auth } from '../../utils/auth/auth-helper'
-import { removePost } from '../../utils/api-user'
+import { removePost, unlike, like } from '../../utils/api-user'
 import DeleteIcon from '../icons/DeleteIcon';
 import { usePost } from '../../context/PostContext';
+import Comments from './Comments';
+import Actions from './Actions';
+import { useState } from 'react';
 
 interface PostProps {
     post: {
@@ -22,9 +22,34 @@ interface PostProps {
     };
 }
 const Post = ({post}: PostProps) => {
-  
+
   const jwt = auth.isAuthenticated()
+
+  const [values, setValues] = useState({
+    like: isLiked(post.likes),
+    likes: post.likes.length,
+    comments: post.comments.length
+  })
   const { removePosts } = usePost()
+
+  function isLiked(likes: any[]) {
+    return likes.includes(jwt.user.id)
+  }
+
+  const handleLike = () => {
+    let callApi = values.like ? unlike : like
+    callApi(post._id, jwt.token, jwt.user.id)
+        .then(res => {
+            if (res.status != 200) {
+                console.log(res)
+            } else {
+                setValues({...values, like: !values.like,
+                    likes: res.data.likes?.length
+                })
+                console.log(res)
+            }
+        })
+  }
 
   const deletePost = () => {
     removePost(post._id, jwt.token)
@@ -53,22 +78,8 @@ const Post = ({post}: PostProps) => {
             <p>{post.text}</p>
         </div>
         <div className='bg-green-light'>
-            <div className='flex px-5 py-3 border-b-2 border-[#ccc] gap-6'>
-                <button className='flex items-center gap-2'>
-                    <LikeIconFill fill='#aaa' />
-                    <span>{1}</span>
-                </button>
-                <button className='flex items-center gap-2'>
-                    <CommentIcon />
-                    <span>{1}</span>
-                </button>
-            </div>
-            <div className='px-8 py-2 flex items-end gap-4'>
-                <Avatar photo={jwt.user.photo} />
-                <FormField className='w-full text-base'>
-                    <TextArea className='w-full bg-inherit mb-1' placeholder='Write something...' />
-                </FormField>
-            </div>
+            <Actions onLiked={handleLike} likes={values.likes} isLiked={values.like} comments={values.comments} />
+            <Comments />
         </div>
     </div>
   )
