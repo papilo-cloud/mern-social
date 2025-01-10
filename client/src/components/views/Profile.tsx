@@ -13,39 +13,38 @@ import FollowGrid from '../core/FollowGrid/FollowGrid.tsx'
 import {TabItems, TabLists} from '../core/Tab/index.ts'
 import PostList from '../Newsfeed/PostList.tsx'
 import Snackbar from '../core/Snackbar/Snackbar.tsx'
+import { usePost } from '../../context/PostContext.tsx'
 
 const Profile = () => {
 
   const [isOpen, setIsOpen] = useState(false)
   const [user, setUser] = useState<any>({})
   const [isFollowing, setIsFollowing] = useState(true)
-  const [follow, setFollow] = useState({
-    isFollowing: true,
-    message: '',
-    open: false
-  })
-  const [posts, setPosts] = useState<any>([])
 
   const jwt = auth.isAuthenticated()
   const { userId } = useParams()
   const { signout, setOpen, open } = useAuth().auth
+  const {posts, setPosts} = usePost()
   const navigate = useNavigate()
 
   useEffect(() => {
+    let ignore = false
     read(userId, jwt.token)
       .then(response => {
         if (response.status != 200) {
           console.log(user)
         } else {
-          let following = checkFollow(response.data)
-          setIsFollowing(following)
-          setFollow({
-            ...follow, isFollowing: following
-          })
-          setUser(response.data)
-          loadPosts(response.data._id)
+          if (!ignore) {
+            let following = checkFollow(response.data)
+            setIsFollowing(following)
+            setUser(response.data)
+            loadPosts(response.data._id)
+          }
         }
       })
+    return () => {
+      ignore = true
+    }
   }, [userId])
 
   const handleClick = () => {
@@ -74,14 +73,10 @@ const Profile = () => {
           console.log(res)
         } else {
           setIsFollowing(!isFollowing)
-          setFollow({
-            ...follow, isFollowing: !isFollowing, open: true
-          })
           setOpen(true)
         }
       })
   }
-  console.log(follow)
 
   const loadPosts = (user) => {
     listByUser(user, jwt.token)
@@ -100,7 +95,10 @@ const Profile = () => {
 
   return (
     <>
-    <Snackbar timedOut={5} isOpen={open}>{user.name}</Snackbar>
+    <Snackbar 
+      timedOut={5} 
+      isOpen={open} 
+      message={isFollowing ? 'Following': 'Unfollowed'}>{user.name}</Snackbar>
     <div className='relative flex self-center w-full min-h-[80vh] justify-center items-center mt-20'>
       <div className='flex flex-col max-w-[800px] drop-shadow-md rounded p-5 bg-white'>
           <h3 className='text-xl font-medium text-[#c14832]'>Profile</h3>
@@ -135,7 +133,7 @@ const Profile = () => {
             buttonStyle=""
             tabIndex={1}>
             <TabItems label="posts">
-                <PostList posts={posts} removeUpdate={() => {}} />
+                <PostList />
             </TabItems>
             <TabItems label="following">
                 <FollowGrid array={user.following} />
