@@ -46,7 +46,6 @@ const Post = ({post}: PostProps) => {
                 setValues({...values, like: !values.like,
                     likes: res.data.likes?.length
                 })
-                console.log(res)
             }
         })
   }
