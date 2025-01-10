@@ -1,14 +1,15 @@
 import clsx from 'clsx'
 import ProfileIcon from '../../icons/ProfileIcon'
+import React, { ComponentProps } from 'react'
 
-interface AvatarProps {
+interface AvatarProps extends ComponentProps<'div'> {
     photo?: string
 }
-const Avatar = ({photo}: AvatarProps) => {
+const Avatar  = ({photo, className}: AvatarProps) => {
   const PF = 'http://localhost:8080/uploads/'
     
   return (
-    <div className='relative bg-gray-400 rounded-full flex items-center justify-center w-14 h-14 '>
+    <div className={clsx('relative bg-gray-400 rounded-full flex items-center justify-center w-14 h-14 ', className)}>
         {photo ?
             <img
                 className='rounded-full'
