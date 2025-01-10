@@ -14,7 +14,7 @@ const listNewsFeed = async (req, res) => {
         let posts = await Post.find({postedBy: {
                 $in: req.profile.following
             }})
-            .populate('comments.postedBy', '_id name')
+            .populate('comments.postedBy', '_id name photo')
             .populate('postedBy', '_id name photo')
             .exec()
         res.json(posts)
@@ -28,7 +28,7 @@ const listNewsFeed = async (req, res) => {
 const listByUser = async (req, res) => {
     try {
         let posts = await Post.find({postedBy: req.params.userId})
-                                .populate('comments.postedBy', '_id name')
+                                .populate('comments.postedBy', '_id name photo')
                                 .populate('postedBy', '_id name photo')
                                 .exec()
         res.json(posts)
@@ -95,7 +95,25 @@ const unlike = async (req, res) => {
     }
 }
 
+const comment = async (req, res) => {
+    try {
+        const result = await Post.findByIdAndUpdate(req.body.postId, 
+                            {
+                                $push: {comments: req.body.comment}
+                            },
+                            {new: true})
+                            .populate('comments.postedBy', '_id name photo')
+                            .populate('postedBy', '_id name photo')
+                            .exec()
+        res.json(result)
+                                
+    } catch (err) {
+        return res.status(400).json({
+            error: getErrorMessage(err)
+        })
+    }
+}
 
 module.exports = {listNewsFeed, listByUser, createPost, postsPolicy,
-    removePost, like, unlike
+    removePost, like, unlike, comment
 }
