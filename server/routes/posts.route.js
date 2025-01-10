@@ -1,6 +1,6 @@
 const {listNewsFeed, listByUser, createPost,
     postsPolicy, removePost,
-    like,unlike} = require('../controller/posts.controller')
+    like, unlike, comment} = require('../controller/posts.controller')
 const enforce = require('../lib/enforce')
 const requireAuth = require('../lib/require-auth')
 
@@ -8,6 +8,7 @@ const postRoute = require('express').Router()
 
 postRoute.use(requireAuth)
 postRoute.route('/like').put(like)
+postRoute.route('/comment').put(comment)
 postRoute.route('/unlike').put(unlike)
 postRoute.route('/new/:userId')
     .post(createPost)
